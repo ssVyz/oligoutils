@@ -52,3 +52,15 @@ func TestBaseMatching(t *testing.T) {
 	fmt.Printf("input base %v, template base %v, matching: %v\n", string(bases[2]), string(template[2]), isComplementMatch(bases[2], template[2]))
 
 }
+
+func TestBaseIdentical(t *testing.T) {
+
+	bases := "ART"
+	template := "AGA"
+
+	fmt.Println("Matching three bases:")
+	fmt.Printf("input base %v, template base %v, matching: %v\n", string(bases[0]), string(template[0]), isIdentical(bases[0], template[0]))
+	fmt.Printf("input base %v, template base %v, matching: %v\n", string(bases[1]), string(template[1]), isIdentical(bases[1], template[1]))
+	fmt.Printf("input base %v, template base %v, matching: %v\n", string(bases[2]), string(template[2]), isIdentical(bases[2], template[2]))
+
+}

@@ -38,6 +38,49 @@ var matches = map[string][]string{
 	"I": {"A", "T", "G", "C"},
 }
 
+var identical = map[string][]string{
+	"A": {"A"},
+	"T": {"T"},
+	"G": {"G"},
+	"C": {"C"},
+	"U": {"T"},
+
+	"R": {"A", "G"},
+	"Y": {"C", "T"},
+	"S": {"G", "C"},
+	"W": {"A", "T"},
+	"K": {"G", "T"},
+	"M": {"A", "C"},
+
+	"B": {"C", "G", "T"},
+	"D": {"A", "G", "T"},
+	"H": {"A", "C", "T"},
+	"V": {"A", "C", "G"},
+
+	"N": {"A", "T", "G", "C"},
+	"I": {"A", "T", "G", "C"},
+}
+
+
+func isIdentical(bas byte, template byte) bool {
+	if isValidBase(bas) != true || isValidBase(template) != true {
+		return false
+	}
+	basConv := strings.ToUpper(string(bas))
+	templConv := strings.ToUpper(string(template))
+	matching := false
+
+	lst, ok := identical[basConv]
+	if !ok {return false;}
+
+	for _, item := range lst {
+		if item == templConv {
+			matching = true
+		}
+	}
+	return matching
+}
+
 
 func isComplementMatch(bas byte, template byte) bool {
 	if isValidBase(bas) != true || isValidBase(template) != true {
