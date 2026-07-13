@@ -41,8 +41,9 @@ var matches = map[byte][]byte{
 
 func isValidBase(b byte) bool {
 	isValid := false
+	bString := strings.ToUpper(string(b))
 	for i := 0; i < len(Iupac); i++ {
-		if b == Iupac[i] {
+		if bString == string(Iupac[i]) {
 			isValid = true
 		}
 	}
@@ -104,7 +105,7 @@ func ParseFasta(path string) ([]Seqr, error) {
 			continue
 		} else if buildHeader == false {
 			if isValidBase(c) == true {
-				currentRec.Seq = currentRec.Seq + string(c)
+				currentRec.Seq = currentRec.Seq + strings.ToUpper(string(c))
 			}
 			continue
 		}
