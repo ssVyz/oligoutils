@@ -55,12 +55,27 @@ func TestBaseMatching(t *testing.T) {
 
 func TestBaseIdentical(t *testing.T) {
 
-	bases := "ART"
+	bases := "WRT"
 	template := "AGA"
 
 	fmt.Println("Matching three bases:")
 	fmt.Printf("input base %v, template base %v, matching: %v\n", string(bases[0]), string(template[0]), isIdentical(bases[0], template[0]))
 	fmt.Printf("input base %v, template base %v, matching: %v\n", string(bases[1]), string(template[1]), isIdentical(bases[1], template[1]))
 	fmt.Printf("input base %v, template base %v, matching: %v\n", string(bases[2]), string(template[2]), isIdentical(bases[2], template[2]))
+
+}
+
+func TestOligoMatch(t *testing.T) {
+
+	oligo1 := "WGTTRCCTGA"
+	oligo2 := "AGTTGCCTGA"
+	oligo3 := "TGTTCCCTGA"
+	oligo4 := "AATGTCA"
+	oligo5 := "AATGTCA"
+
+	fmt.Println("Matching 3 oligo combinations:")
+	fmt.Printf("Oligo1 %v, Oligo2 %v, matching: %v\n", oligo1, oligo2, OligoMatch(oligo1, oligo2))
+	fmt.Printf("Oligo1 %v, Oligo2 %v, matching: %v\n", oligo1, oligo3, OligoMatch(oligo1, oligo3))
+	fmt.Printf("Oligo1 %v, Oligo2 %v, matching: %v\n", oligo4, oligo5, OligoMatch(oligo4, oligo5))
 
 }

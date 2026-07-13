@@ -13,7 +13,7 @@ type Seqr struct {
 }
 
 
-const Iupac = "ATGCRYVBMHDSKN"
+const Iupac = "ATGCRYWVBMHDSKN"
 
 var matches = map[string][]string{
 	"A": {"T"},
@@ -59,6 +59,17 @@ var identical = map[string][]string{
 
 	"N": {"A", "T", "G", "C"},
 	"I": {"A", "T", "G", "C"},
+}
+
+
+func OligoMatch(query string, template string) bool {
+	if len(query) != len(template) {
+		return false
+	}
+	for i := 0; i < len(query); i++ {
+		if !isIdentical(query[i], template[i]) {return false;}
+	}
+	return true
 }
 
 
