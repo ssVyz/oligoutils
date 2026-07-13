@@ -13,7 +13,32 @@ type Seqr struct {
 }
 
 
-const Iupac = "ATGCRYWVBMHDSKN"
+const Iupac = "ATGCURYWVBMHDSKNI"
+
+
+var complements = map[string]string{
+	"A": "T",
+	"T": "A",
+	"G": "C",
+	"C": "G",
+	"U": "A",
+
+	"R": "Y",
+	"Y": "R",
+	"S": "S",
+	"W": "W",
+	"K": "M",
+	"M": "K",
+
+	"B": "V",
+	"V": "B",
+	"D": "H",
+	"H": "D",
+
+	"N": "N",
+	"I": "N",
+}
+
 
 var matches = map[string][]string{
 	"A": {"T"},
@@ -60,6 +85,21 @@ var identical = map[string][]string{
 	"N": {"A", "T", "G", "C"},
 	"I": {"A", "T", "G", "C"},
 }
+
+
+func MakeReverseComplement(oligo string) (string, error) {
+	oligoLength := len(oligo)
+	idx := oligoLength - 1
+	var result string
+
+	for i := 0; i < oligoLength; i++ {
+		currentPos := oligo[idx]
+		if !isValidBase(currentPos) {return "", fmt.Errorf("Invalid base: %v", currentPos)}
+		result = result + complements[string(currentPos)]
+		idx--
+	}
+	return result, nil
+} 
 
 
 func OligoMatch(query string, template string) bool {

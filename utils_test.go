@@ -79,3 +79,16 @@ func TestOligoMatch(t *testing.T) {
 	fmt.Printf("Oligo1 %v, Oligo2 %v, matching: %v\n", oligo4, oligo5, OligoMatch(oligo4, oligo5))
 
 }
+
+func TestMakeReverseOligo(t *testing.T) {
+
+	oligo1 := "ATAGTGCCCRGVIGTG"
+	oligo2 := "ATAGTTC-CTA"
+
+	res1, err1 := MakeReverseComplement(oligo1)
+	res2, err2 := MakeReverseComplement(oligo2)
+
+	fmt.Println("Testing reverse complement:")
+	fmt.Printf("Oligo %v, reverse complement %v, error %v\n", oligo1, res1, err1)
+	fmt.Printf("Oligo %v, reverse complement %v, error %v\n", oligo2, res2, err2)
+}
