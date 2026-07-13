@@ -15,27 +15,47 @@ type Seqr struct {
 
 const Iupac = "ATGCRYVBMHDSKN"
 
-var matches = map[byte][]byte{
-	'A': {'T'},
-	'T': {'A'},
-	'G': {'C'},
-	'C': {'G'},
-	'U': {'A'},
+var matches = map[string][]string{
+	"A": {"T"},
+	"T": {"A"},
+	"G": {"C"},
+	"C": {"G"},
+	"U": {"A"},
 
-	'R': {'T', 'C'},
-	'Y': {'G', 'A'},
-	'S': {'C', 'G'},
-	'W': {'T', 'A'},
-	'K': {'C', 'A'},
-	'M': {'T', 'G'},
+	"R": {"T", "C"},
+	"Y": {"G", "A"},
+	"S": {"C", "G"},
+	"W": {"T", "A"},
+	"K": {"C", "A"},
+	"M": {"T", "G"},
 
-	'B': {'G', 'C', 'A'},
-	'D': {'T', 'C', 'A'},
-	'H': {'T', 'G', 'A'},
-	'V': {'T', 'G', 'C'},
+	"B": {"G", "C", "A"},
+	"D": {"T", "C", "A"},
+	"H": {"T", "G", "A"},
+	"V": {"T", "G", "C"},
 
-	'N': {'A', 'T', 'G', 'C'},
-	'I': {'A', 'T', 'G', 'C'},
+	"N": {"A", "T", "G", "C"},
+	"I": {"A", "T", "G", "C"},
+}
+
+
+func isComplementMatch(bas byte, template byte) bool {
+	if isValidBase(bas) != true || isValidBase(template) != true {
+		return false
+	}
+	basConv := strings.ToUpper(string(bas))
+	templConv := strings.ToUpper(string(template))
+	matching := false
+
+	lst, ok := matches[basConv]
+	if !ok {return false;}
+
+	for _, item := range lst {
+		if item == templConv {
+			matching = true
+		}
+	}
+	return matching
 }
 
 

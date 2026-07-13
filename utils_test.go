@@ -40,3 +40,15 @@ func TestParseFastaMalformed(t *testing.T) {
 		t.Fatalf("malformed did not result in an error")
 	}
 }
+
+func TestBaseMatching(t *testing.T) {
+
+	bases := "ART"
+	template := "TCT"
+
+	fmt.Println("Matching three bases:")
+	fmt.Printf("input base %v, template base %v, matching: %v\n", string(bases[0]), string(template[0]), isComplementMatch(bases[0], template[0]))
+	fmt.Printf("input base %v, template base %v, matching: %v\n", string(bases[1]), string(template[1]), isComplementMatch(bases[1], template[1]))
+	fmt.Printf("input base %v, template base %v, matching: %v\n", string(bases[2]), string(template[2]), isComplementMatch(bases[2], template[2]))
+
+}
