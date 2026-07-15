@@ -189,6 +189,9 @@ func ParseFasta(path string) ([]Seqr, error) {
 		// read a byte and handle EOF or errors
 		c, err := r.ReadByte()
 		if err == io.EOF {
+			if firstPass == false && buildHeader == false {
+				res = append(res, currentRec)
+			}
 			break
 		} else if err != nil {
 			return []Seqr{}, fmt.Errorf("Error while reading input: %w", err)
