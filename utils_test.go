@@ -92,3 +92,13 @@ func TestMakeReverseOligo(t *testing.T) {
 	fmt.Printf("Oligo %v, reverse complement %v, error %v\n", oligo1, res1, err1)
 	fmt.Printf("Oligo %v, reverse complement %v, error %v\n", oligo2, res2, err2)
 }
+
+func TestIsCanonBase(t *testing.T) {
+
+	oligo1 := "CURRYWURST"
+
+	for i := 0; i < len(oligo1); i++ {
+		fmt.Printf("Result for %v is %v\n", oligo1[i], isCanonBase(oligo1[i]))
+	}
+
+}

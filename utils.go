@@ -86,7 +86,7 @@ var identical = map[string][]string{
 	"I": {"A", "T", "G", "C"},
 }
 
-
+// reverse complement an oligo
 func MakeReverseComplement(oligo string) (string, error) {
 	oligoLength := len(oligo)
 	idx := oligoLength - 1
@@ -101,7 +101,7 @@ func MakeReverseComplement(oligo string) (string, error) {
 	return result, nil
 } 
 
-
+// Oligo comparer. Checks if two oligos are identical, IUPAC aware for query
 func OligoMatch(query string, template string) bool {
 	if len(query) != len(template) {
 		return false
@@ -112,7 +112,7 @@ func OligoMatch(query string, template string) bool {
 	return true
 }
 
-
+// is this position identical? IUPAC aware for query, i.e. bas
 func isIdentical(bas byte, template byte) bool {
 	if isValidBase(bas) != true || isValidBase(template) != true {
 		return false
@@ -132,7 +132,7 @@ func isIdentical(bas byte, template byte) bool {
 	return matching
 }
 
-
+// Is this a valid base pairing? both as bytes
 func isComplementMatch(bas byte, template byte) bool {
 	if isValidBase(bas) != true || isValidBase(template) != true {
 		return false
@@ -152,7 +152,7 @@ func isComplementMatch(bas byte, template byte) bool {
 	return matching
 }
 
-
+// checks if a byte character represents a valid IUPAC base
 func isValidBase(b byte) bool {
 	isValid := false
 	bString := strings.ToUpper(string(b))
@@ -164,7 +164,7 @@ func isValidBase(b byte) bool {
 	return isValid
 }
 
-
+// Load a fasta file and turn it into a slice of Seqr
 func ParseFasta(path string) ([]Seqr, error) {
 	// initialize the result slice
 	var res []Seqr
@@ -178,7 +178,6 @@ func ParseFasta(path string) ([]Seqr, error) {
 
 	r := bufio.NewReader(f)
 
-	// ------------------------------
 	// Go into the Seqr building loop
 
 	firstPass := true
@@ -229,3 +228,15 @@ func ParseFasta(path string) ([]Seqr, error) {
 	}
 	return res, nil
 }
+
+
+// Seqr list cleanup area
+
+func isCanonBase(bas byte) bool {
+	switch bas {
+	case 'A', 'T', 'G', 'C':
+		return true
+	}
+	return false
+}
+
