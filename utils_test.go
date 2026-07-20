@@ -106,7 +106,21 @@ func TestIsCanonOligo(t *testing.T) {
 	seq1 := Seqr{Header: "Testseq1", Seq: "AAAGGGTACCCATTGTC",}
 	seq2 := Seqr{Header: "Testseq2", Seq: "AAAGRGTACCCATTGTC",}
 
-	fmt.Printf("Testing canon oligo with %v, result: %v\n", seq1.Header, isCanonOligo(seq1))
-	fmt.Printf("Testing canon oligo with %v, result: %v\n", seq2.Header, isCanonOligo(seq2))
+	fmt.Printf("Testing canon oligo with %v, result: %v\n", seq1.Header, IsCanonOligo(seq1))
+	fmt.Printf("Testing canon oligo with %v, result: %v\n", seq2.Header, IsCanonOligo(seq2))
+}
 
+func TestCleanList(t *testing.T) {
+	seq3 := Seqr{Header: "Testseq1", Seq: "AAAGGGTACCCATTGTC",}
+	seq4 := Seqr{Header: "Testseq2", Seq: "AAAGRGTACCCATTGTC",}
+	seq5 := Seqr{Header: "Testseq2", Seq: "AAAGAGTACCCATTGTC",}
+
+	lst := []Seqr{}
+	lst = append(lst, seq3)
+	lst = append(lst, seq4)
+	lst = append(lst, seq5)
+
+	cleanList, elim := CleanSeqList(lst)
+
+	fmt.Printf("Length of input list %v, length of output list %v, eliminated: %v\n", len(lst), len(cleanList), elim) 
 }

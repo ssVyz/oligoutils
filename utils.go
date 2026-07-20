@@ -164,7 +164,7 @@ func isValidBase(b byte) bool {
 	return isValid
 }
 
-// Load a fasta file and turn it into a slice of Seqr
+// Load a fasta file and turn it as a slice of Seqr
 func ParseFasta(path string) ([]Seqr, error) {
 	// initialize the result slice
 	var res []Seqr
@@ -232,6 +232,7 @@ func ParseFasta(path string) ([]Seqr, error) {
 
 // Seqr list cleanup area
 
+// Check if this byte is a cannonical base
 func isCanonBase(bas byte) bool {
 	switch bas {
 	case 'A', 'T', 'G', 'C':
@@ -240,12 +241,29 @@ func isCanonBase(bas byte) bool {
 	return false
 }
 
-func isCanonOligo(oli Seqr) bool {
+// Returns false if this Seqr contains a non-cannonical base
+func IsCanonOligo(oli Seqr) bool {
 	if len(oli.Seq) == 0 {return false;}
 	result := true
 	for i := 0; i < len(oli.Seq); i++ {
 		if !isCanonBase(oli.Seq[i]) {result = false;}
 	}
 	return result
+}
+
+func CleanSeqList(sl []Seqr) ([]Seqr, int) {
+	if len(sl) == 0 {return []Seqr{}, 0;}
+	
+	result := []Seqr{}
+	eliminated := 0
+
+	for i := 0; i < len(sl); i++ {
+		if IsCanonOligo(sl[i]) {
+			result = append(result, sl[i])
+		} else {
+			eliminated++
+		}
+	}
+	return result, eliminated
 }
 
