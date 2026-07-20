@@ -100,5 +100,13 @@ func TestIsCanonBase(t *testing.T) {
 	for i := 0; i < len(oligo1); i++ {
 		fmt.Printf("Result for %v is %v\n", oligo1[i], isCanonBase(oligo1[i]))
 	}
+}
+
+func TestIsCanonOligo(t *testing.T) {
+	seq1 := Seqr{Header: "Testseq1", Seq: "AAAGGGTACCCATTGTC",}
+	seq2 := Seqr{Header: "Testseq2", Seq: "AAAGRGTACCCATTGTC",}
+
+	fmt.Printf("Testing canon oligo with %v, result: %v\n", seq1.Header, isCanonOligo(seq1))
+	fmt.Printf("Testing canon oligo with %v, result: %v\n", seq2.Header, isCanonOligo(seq2))
 
 }

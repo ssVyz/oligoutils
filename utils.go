@@ -240,3 +240,12 @@ func isCanonBase(bas byte) bool {
 	return false
 }
 
+func isCanonOligo(oli Seqr) bool {
+	if len(oli.Seq) == 0 {return false;}
+	result := true
+	for i := 0; i < len(oli.Seq); i++ {
+		if !isCanonBase(oli.Seq[i]) {result = false;}
+	}
+	return result
+}
+
