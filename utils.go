@@ -1,3 +1,8 @@
+
+//// Oligoutils
+//// version 0.1 - 260811
+////
+
 package oligoutils
 
 import "bufio"
@@ -251,6 +256,7 @@ func IsCanonOligo(oli Seqr) bool {
 	return result
 }
 
+// takes a Seqr list and returns a clean version without ambiguity letters
 func CleanSeqList(sl []Seqr) ([]Seqr, int) {
 	if len(sl) == 0 {return []Seqr{}, 0;}
 	
