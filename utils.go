@@ -1,6 +1,6 @@
 
 //// Oligoutils
-//// version 0.1 - 260811
+//// version 0.2 - 260903
 ////
 
 package oligoutils
@@ -10,6 +10,7 @@ import "os"
 import "io"
 import "fmt"
 import "strings"
+import "slices"
 
 
 type Seqr struct {
@@ -77,7 +78,7 @@ var identical = map[string][]string{
 
 	"R": {"A", "G"},
 	"Y": {"C", "T"},
-	"S": {"G", "C"},
+	"S": {"C", "G"},
 	"W": {"A", "T"},
 	"K": {"G", "T"},
 	"M": {"A", "C"},
@@ -87,8 +88,8 @@ var identical = map[string][]string{
 	"H": {"A", "C", "T"},
 	"V": {"A", "C", "G"},
 
-	"N": {"A", "T", "G", "C"},
-	"I": {"A", "T", "G", "C"},
+	"N": {"A", "C", "G", "T"},
+	"I": {"A", "C", "G", "T"},
 }
 
 
@@ -193,6 +194,38 @@ func isCanonBase(bas byte) bool {
 	return false
 }
 
+func collapseIupac(bases []byte) (byte, error) {
+	if len(bases) == 0 || len(bases) > 4 {return 0, fmt.Errorf("invalid base list");}
+
+	// make string representation of the slice in alphabetical order
+	var stringSlice = []string{}
+	for _, base := range bases {
+		if base == byte('A') {stringSlice = append(stringSlice, "A");}
+	}
+	for _, base := range bases {
+		if base == byte('C') {stringSlice = append(stringSlice, "C");}
+	}
+	for _, base := range bases {
+		if base == byte('G') {stringSlice = append(stringSlice, "G");}
+	}
+	for _, base := range bases {
+		if base == byte('T') {stringSlice = append(stringSlice, "T");}
+	}
+
+	// Find the entry that matches the stringSlice. Uses slices.Equal to compare two slices
+	var result byte = 0
+	for key, slce := range identical {
+		if slices.Equal(slce, stringSlice) && key != "U" && key != "I" {
+			result = key[0]
+		}
+	}
+
+	if result == 0 {
+		return 0, fmt.Errorf("IUPAC character not found");
+	} else {
+		return result, nil
+	}
+}
 
 
 
@@ -304,5 +337,29 @@ func CleanSeqList(sl []Seqr) ([]Seqr, int) {
 		}
 	}
 	return result, eliminated
+}
+
+// Checks if all Seqr have the same length. Returns the length if yes. Otherwise returns an error
+func SeqListLength(sl []Seqr) (int, error) {
+	if len(sl) == 0 {return 0, fmt.Errorf("Can not find consensus length, Seq list is empty");}
+	first := len(sl[0].Seq)
+
+	for i := 0; i < len(sl); i++ {
+		if len(sl[i].Seq) != first {
+			return 0, fmt.Errorf("Not all sequences are identical in length")
+		}
+	}
+	return first, nil
+}
+
+// Collapse a seqr list into a consensus sequence
+func MakeConsensus(sl []Seqr) (string, error) {
+	_, err := SeqListLength(sl)
+	if err != nil {
+		return "", err
+	}
+
+	var resultString str = ""
+
 }
 
