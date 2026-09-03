@@ -124,3 +124,21 @@ func TestCleanList(t *testing.T) {
 
 	fmt.Printf("Length of input list %v, length of output list %v, eliminated: %v\n", len(lst), len(cleanList), elim) 
 }
+
+
+func TestCollapseIupac (t *testing.T) {
+
+	seq6 := Seqr{Header: "Testseq1", Seq: "AAAGGGTACCCATTGTC",}
+	seq7 := Seqr{Header: "Testseq2", Seq: "AAAGTGTACCCATTGTC",}
+	seq8 := Seqr{Header: "Testseq2", Seq: "AAAGAGTACCAATTTTC",}
+
+	lst := []Seqr{}
+	lst = append(lst, seq6)
+	lst = append(lst, seq7)
+	lst = append(lst, seq8)
+
+	collapsed, _ := MakeConsensus(lst)
+
+	fmt.Printf("%v\n%v\n%v\n%v\n", seq6.Seq, seq7.Seq, seq8.Seq, collapsed)
+
+}
