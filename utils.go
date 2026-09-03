@@ -18,6 +18,10 @@ type Seqr struct {
 	Seq string
 }
 
+type posBase struct {
+	bases []byte
+}
+
 
 const Iupac = "ATGCURYWVBMHDSKNI"
 
@@ -354,12 +358,61 @@ func SeqListLength(sl []Seqr) (int, error) {
 
 // Collapse a seqr list into a consensus sequence
 func MakeConsensus(sl []Seqr) (string, error) {
-	_, err := SeqListLength(sl)
+	leng, err := SeqListLength(sl)
 	if err != nil {
 		return "", err
 	}
 
-	var resultString str = ""
+	var resultString string = ""
+	var resultSlce = []byte{}
+	var positions = []posBase{}
+
+	// populate the positions slice with the variants for each position
+	for i := 0; i < leng; i++ {
+		posBuild := posBase{}
+		for j := 0; j < len(sl); j++ {
+			if sl[j].Seq[i] == 'A' {
+				posBuild.bases = append(posBuild.bases, 'A')
+				break
+			}
+		}
+		for j := 0; j < len(sl); j++ {
+			if sl[j].Seq[i] == 'C' {
+				posBuild.bases = append(posBuild.bases, 'C')
+				break
+			}
+		}
+		for j := 0; j < len(sl); j++ {
+			if sl[j].Seq[i] == 'G' {
+				posBuild.bases = append(posBuild.bases, 'G')
+				break
+			}
+		}
+		for j := 0; j < len(sl); j++ {
+			if sl[j].Seq[i] == 'T' {
+				posBuild.bases = append(posBuild.bases, 'T')
+				break
+			}
+		}
+
+		positions = append(positions, posBuild)
+	}
+
+	//collapse the positions into iupacs
+	for i := 0; i < len(positions); i++ {
+		var newBase byte
+		newBase, err := collapseIupac(positions[i].bases)
+		if err != nil {
+			return "", err
+		}
+
+		if newBase != 0 {
+			resultSlce = append(resultSlce, newBase)
+		}
+	}
+
+	resultString = string(resultSlce)
+	return resultString, nil
 
 }
 
