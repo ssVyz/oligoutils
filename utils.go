@@ -91,6 +91,8 @@ var identical = map[string][]string{
 	"I": {"A", "T", "G", "C"},
 }
 
+
+/// Oligo ops area. Functions that act on entire oligos
 // reverse complement an oligo
 func MakeReverseComplement(oligo string) (string, error) {
 	oligoLength := len(oligo)
@@ -117,6 +119,19 @@ func OligoMatch(query string, template string) bool {
 	return true
 }
 
+// Returns false if this Seqr contains a non-cannonical base
+func IsCanonOligo(oli Seqr) bool {
+	if len(oli.Seq) == 0 {return false;}
+	result := true
+	for i := 0; i < len(oli.Seq); i++ {
+		if !isCanonBase(oli.Seq[i]) {result = false;}
+	}
+	return result
+}
+
+
+
+/// Per position area. Functions that compare or act on individual bases.
 // is this position identical? IUPAC aware for query, i.e. bas
 func isIdentical(bas byte, template byte) bool {
 	if isValidBase(bas) != true || isValidBase(template) != true {
@@ -169,6 +184,19 @@ func isValidBase(b byte) bool {
 	return isValid
 }
 
+// Check if this byte is a cannonical base
+func isCanonBase(bas byte) bool {
+	switch bas {
+	case 'A', 'T', 'G', 'C':
+		return true
+	}
+	return false
+}
+
+
+
+
+/// File ops. Reading and writing of fasta files
 // Load a fasta file and turn it as a slice of Seqr
 func ParseFasta(path string) ([]Seqr, error) {
 	// initialize the result slice
@@ -235,27 +263,32 @@ func ParseFasta(path string) ([]Seqr, error) {
 }
 
 
-// Seqr list cleanup area
-
-// Check if this byte is a cannonical base
-func isCanonBase(bas byte) bool {
-	switch bas {
-	case 'A', 'T', 'G', 'C':
-		return true
+func WriteFasta(path string, sl []Seqr) (error) {
+	if len(sl) == 0 {
+		return fmt.Errorf("The provided sequence list is empty\n")
 	}
-	return false
+
+	f, err := os.Create(path)
+	if err != nil {
+		return fmt.Errorf("Error while trying to create file: %v\n", path)
+	}
+	defer f.Close()
+
+	w := bufio.NewWriter(f)
+	defer w.Flush()
+
+	// write Seqr entries one by one
+	for i := 0; i < len(sl); i++ {
+		_, err = fmt.Fprintf(w, ">%v\n%v\n\n", sl[i].Header, sl[i].Seq)
+		if err != nil {
+			return fmt.Errorf("Error while writing Sequence entry %v.\n", i)
+		}
+	}
+	return nil
 }
 
-// Returns false if this Seqr contains a non-cannonical base
-func IsCanonOligo(oli Seqr) bool {
-	if len(oli.Seq) == 0 {return false;}
-	result := true
-	for i := 0; i < len(oli.Seq); i++ {
-		if !isCanonBase(oli.Seq[i]) {result = false;}
-	}
-	return result
-}
 
+/// List area. Functions that act on entire lists
 // takes a Seqr list and returns a clean version without ambiguity letters
 func CleanSeqList(sl []Seqr) ([]Seqr, int) {
 	if len(sl) == 0 {return []Seqr{}, 0;}
