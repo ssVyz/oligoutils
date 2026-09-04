@@ -1,6 +1,6 @@
 
 //// Oligoutils
-//// version 0.2 - 260903
+//// version 0.3 - 260904
 ////
 
 package oligoutils
@@ -73,6 +73,7 @@ var matches = map[string][]string{
 	"I": {"A", "T", "G", "C"},
 }
 
+// Needs to be in alphabetical order. Ambiguous combinations have to be explicitly exluded in the collapseIupac function
 var identical = map[string][]string{
 	"A": {"A"},
 	"T": {"T"},
@@ -94,6 +95,17 @@ var identical = map[string][]string{
 
 	"N": {"A", "C", "G", "T"},
 	"I": {"A", "C", "G", "T"},
+}
+
+
+/// map emitter functions
+// provide a iupac letter list
+func fetchIupacCodes(includeN bool) []byte {
+	if includeN == true {
+		return []byte{'R', 'Y', 'S', 'W', 'K', 'M', 'B', 'D', 'H', 'V', 'N'}
+	} else {
+		return []byte{'R', 'Y', 'S', 'W', 'K', 'M', 'B', 'D', 'H', 'V'}
+	}
 }
 
 
@@ -132,6 +144,21 @@ func IsCanonOligo(oli Seqr) bool {
 		if !isCanonBase(oli.Seq[i]) {result = false;}
 	}
 	return result
+}
+
+// Returns the number of ambiguities in the submitted oligo sequence
+func CountAmbiguities(oligo string) (int, error) {
+	if len(oligo) < 1 {return 0, fmt.Errorf("submitted oligo sequence is empty")};
+	oligoUp := strings.ToUpper(oligo)
+	iupacCodes := fetchIupacCodes(true)
+	var counter int = 0
+
+	for i := 0; i < len(oligoUp); i++ {
+		for _, amb := range iupacCodes {
+			if amb == oligoUp[i] {counter++; break;}
+		}
+	}
+	return counter, nil
 }
 
 
